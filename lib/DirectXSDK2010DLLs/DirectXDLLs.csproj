@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x64</Platform>
+    <ProjectGuid>{C904B590-134B-4C81-BED6-6A23597E6188}</ProjectGuid>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(SolutionDir)\PropertySheets\CsOutputDirectories.props" Condition="exists('$(SolutionDir)\PropertySheets\CsOutputDirectories.props')" />
+  </ImportGroup>
+  <ItemGroup>
+    <ReleaseDLLx64 Include="x64\d3dcompiler_47.dll" />
+    <ReleaseDLLx64 Include="x64\d3dcompiler_43.dll" />
+    <ReleaseDLLx64 Include="x64\d3dx9_43.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <DebugDLLx64 Include="x64\d3dx9d_43.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ReleaseDLLx86 Include="x86\d3dcompiler_43.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <DebugDLLx86 Include="x86\d3dx9d_43.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="GetTargetPath" />
+  <Target Name="GetNativeManifest" />
+  <Target Name="Clean">
+    <Delete Condition="'$(Platform)'=='x64'" Files="@(DebugDLLx64->'$(OutDir)%(Filename)%(Extension)')" />
+    <Delete Condition="'$(Platform)'=='x64'" Files="@(ReleaseDLLx64->'$(OutDir)%(Filename)%(Extension)')" />
+    <Delete Condition="'$(Platform)'=='x86'" Files="@(DebugDLLx86->'$(OutDir)%(Filename)%(Extension)')" />
+    <Delete Condition="'$(Platform)'=='x86'" Files="@(ReleaseDLLx86->'$(OutDir)%(Filename)%(Extension)')" />
+  </Target>
+  <Target Name="Build">
+    <!-- x64 DLLs -->
+    <Copy Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" SourceFiles="@(DebugDLLx64)" DestinationFolder="$(OutDir)" />
+    <Copy Condition="'$(Platform)'=='x64'" SourceFiles="@(ReleaseDLLx64)" DestinationFolder="$(OutDir)" />
+    <!-- x86 DLLs -->
+    <Copy Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" SourceFiles="@(DebugDLLx86)" DestinationFolder="$(OutDir)" />
+    <Copy Condition="'$(Platform)'=='x86'" SourceFiles="@(ReleaseDLLx86)" DestinationFolder="$(OutDir)" />
+  </Target>
+  <!-- Rebuild Target is the same as the Build Target -->
+  <Target Name="Rebuild">
+    <!-- x64 DLLs -->
+    <Copy Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" SourceFiles="@(DebugDLLx64)" DestinationFolder="$(OutDir)" />
+    <Copy Condition="'$(Platform)'=='x64'" SourceFiles="@(ReleaseDLLx64)" DestinationFolder="$(OutDir)" />
+    <!-- x86 DLLs -->
+    <Copy Condition="'$(Configuration)|$(Platform)'=='Debug|x86'" SourceFiles="@(DebugDLLx86)" DestinationFolder="$(OutDir)" />
+    <Copy Condition="'$(Platform)'=='x86'" SourceFiles="@(ReleaseDLLx86)" DestinationFolder="$(OutDir)" />
+  </Target>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+  </Target>
+  <!-- 
+  Don't override this one as it is the one that we need
+  <Target Name="GetCopyToOutputDirectoryItems" />
+  -->
+</Project>
